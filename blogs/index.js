@@ -9,6 +9,12 @@ app.use(express.json())
 
 app.use("/api/blogs", blogsRouter)
 
+const errorHandler = (error, req, res, next) => {
+  console.log(error.message)
+  next(error)
+}
+app.use(errorHandler)
+
 const startApp = async () => {
   await connectToDatabase()
   app.listen(PORT, () => {
