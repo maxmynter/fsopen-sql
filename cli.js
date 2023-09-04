@@ -1,6 +1,11 @@
 require("dotenv").config()
 const { Sequelize, Model, DataTypes } = require("sequelize")
 
+const express = require("express")
+bodyParser = require("body-parser").urlencoded({ extended: true })
+const app = express()
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 const sequelize = new Sequelize(process.env.DATABASE_URL, {})
 
 class Blog extends Model {}
@@ -14,14 +19,29 @@ Blog.init(
   },
   { sequelize, underscored: true, timestamps: false, modelName: "blog" }
 )
+Blog.sync()
 
-const getAndLogBlogs = async () => {
+app.get("/api/blogs", async (req, res) => {
   const blogs = await Blog.findAll()
-  blogs.map((blog) => {
-    console.log(
-      `${blog.dataValues.author}: ${blog.dataValues.title}, ${blog.dataValues.likes} likes`
-    )
-  })
-}
+  res.json(blogs)
+})
 
-getAndLogBlogs()
+app.post("/api/blogs", async (req, res) => {
+  try {
+    const blog = await Blog.create(req.body)
+    return res.json(blog)
+  } catch (err) {
+    return res.status(400).json({ err })
+  }
+})
+
+app.delete("/api/blogs/:id", async (req, res) => {
+  const id = req.params.id
+  Blog.destroy({ where: { id } })
+  return res.status(204).send()
+})
+
+const PORT = process.env.PORT || 3002
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
