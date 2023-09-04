@@ -38,7 +38,12 @@ router.delete("/:id", noteFinder, async (req, res) => {
 
 router.put("/:id", noteFinder, async (req, res) => {
   if (req.note) {
-    req.note.important = req.body.important
+    if (req.note.important) {
+      req.note.important = req.body.important
+    }
+    if (req.note.likes) {
+      req.note.likes = req.body.important
+    }
     await note.save()
     res.json(req.note)
   } else {
