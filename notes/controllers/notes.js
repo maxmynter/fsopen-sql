@@ -54,14 +54,14 @@ router.get("/:id", noteFinder, async (req, res) => {
   }
 })
 
-router.delete("/:id", noteFinder, async (req, res) => {
+router.delete("/:id", [tokenExtractor, noteFinder], async (req, res) => {
   if (req.note) {
     await req.note.destroy()
   }
   res.status(204).end()
 })
 
-router.put("/:id", noteFinder, async (req, res) => {
+router.put("/:id", [tokenExtractor, noteFinder], async (req, res) => {
   if (req.note) {
     if (req.note.important) {
       req.note.important = req.body.important
