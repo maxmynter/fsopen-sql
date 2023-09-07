@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 
 const { User, Blog } = require("../models")
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { username, name, password } = req.body
     const saltRounds = 10
@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
     const user = await User.create({ username, name, passwordHash })
     res.json(user)
   } catch (error) {
-    res.status(400).json({ error })
+    next(error)
   }
 })
 

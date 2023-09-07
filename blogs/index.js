@@ -14,7 +14,11 @@ app.use("/api/users", usersRouter)
 app.use("/api/blogs", blogsRouter)
 
 const errorHandler = (error, req, res, next) => {
-  console.log(error.message)
+  if (error.name === "SequelizeValidationError") {
+    res.status(400).send({ error: error.errors.map((err) => err.message) })
+  } else {
+    console.log("ERROR:", error.message)
+  }
   next(error)
 }
 app.use(errorHandler)
