@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const { Note } = require("../models")
+const { Note, User } = require("../models")
 
 const noteFinder = async (req, res, next) => {
   req.note = await Note.findByPk(req.params.id)
@@ -22,7 +22,13 @@ const tokenExtractor = (req, res, next) => {
 }
 
 router.get("/", async (req, res) => {
-  const notes = await Note.findAll()
+  const notes = await Note.findAll({
+    attributes: { exclude: ["userId"] },
+    include: {
+      model: User,
+      attributes: ["name"],
+    },
+  })
   res.json(notes)
 })
 
