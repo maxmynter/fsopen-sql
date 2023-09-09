@@ -1,7 +1,6 @@
 const router = require("express").Router()
 const { read } = require("fs")
-const { Blog, User } = require("../models")
-const ReadingList = require("../models/reading_list")
+const { Blog, User, ReadingList } = require("../models")
 const { tokenExtractor } = require("../util/middleware")
 
 router.get("/", async (req, res) => {

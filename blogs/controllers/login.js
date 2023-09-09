@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const router = require("express").Router()
+const userIsDisabled = require("../util/userIsDisabled")
 
 const { SECRET } = require("../util/config")
-const User = require("../models/user")
+const { User, ActiveSession, Disabled } = require("../models")
 
 router.post("/", async (request, response) => {
   const body = request.body
@@ -24,6 +25,13 @@ router.post("/", async (request, response) => {
     })
   }
 
+  const isDisabled = await userIsDisabled(user.id)
+  if (isDisabled) {
+    return response
+      .status(403)
+      .json({ error: "User deactivated. Please contact an administrator." })
+  }
+
   const userForToken = {
     username: user.username,
     id: user.id,
@@ -31,7 +39,11 @@ router.post("/", async (request, response) => {
 
   const token = jwt.sign(userForToken, SECRET)
 
-  response.status(200).send({ token, username: user.username, name: user.name })
+  await ActiveSession.create({ userId: user.id, token })
+
+  return response
+    .status(200)
+    .send({ token, username: user.username, name: user.name })
 })
 
 module.exports = router
