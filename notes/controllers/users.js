@@ -76,7 +76,14 @@ router.get("/:id", async (req, res) => {
     ],
   })
   if (user) {
-    res.json(user)
+    let teams = undefined
+    if (req.query.teams) {
+      teams = await user.getTeams({
+        attributes: ["name"],
+        joinTableAttributes: [],
+      })
+    }
+    res.json({ ...user.toJSON(), teams })
   } else {
     res.status(404).end()
   }
