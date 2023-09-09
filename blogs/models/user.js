@@ -15,7 +15,10 @@ User.init(
         isEmail: true,
       },
     },
-    passwordHash: { type: DataTypes.TEXT, allowNull: false },
+    passwordHash: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     createdAt: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
     updatedAt: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
   },

@@ -13,8 +13,8 @@ module.exports = {
       url: { type: DataTypes.TEXT, allowNull: false },
       title: { type: DataTypes.TEXT, allowNull: false },
       likes: { type: DataTypes.INTEGER, defaultValue: 0 },
-      createdAt: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
-      updatedAt: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
+      created_at: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
+      updated_at: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
     })
     await queryInterface.createTable("users", {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -26,9 +26,9 @@ module.exports = {
           isEmail: true,
         },
       },
-      passwordHash: { type: DataTypes.TEXT, allowNull: false },
-      createdAt: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
-      updatedAt: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
+      password_hash: { type: DataTypes.TEXT, allowNull: false },
+      created_at: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
+      updated_at: { type: DataTypes.DATE, defaultValue: sequelize.fn("NOW") },
     })
 
     await queryInterface.addColumn("blogs", "user_id", {
