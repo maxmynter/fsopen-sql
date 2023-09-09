@@ -18,5 +18,12 @@ ReadingList.init(
     },
     read: { type: DataTypes.BOOLEAN, defaultValue: false },
   },
-  { sequelize, underscored: true, timestamps: false, modelName: "reading_list" }
+  {
+    sequelize,
+    underscored: true,
+    timestamps: false,
+    modelName: "reading_list",
+  }
 )
+
+module.exports = ReadingList
